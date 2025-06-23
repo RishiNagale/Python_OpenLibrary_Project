@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is about fetching and analyzing the top 100 books from Open Library. The main tasks include fetching, cleaning, storing in SQL, and visualizing the data.
+This project is about fetching and analyzing the top 100 books from [Open Library](https://openlibrary.org). The main tasks include fetching, cleaning, storing in SQL, and visualizing the data.
 
 ## Plan
 
