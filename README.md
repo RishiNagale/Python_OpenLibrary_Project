@@ -6,16 +6,16 @@ This project is about fetching and analyzing the top 100 books from [Open Librar
 
 ## Plan
 
-- Use Open Library API to get title, author(s), ratings_sortable, and first publish year.
+- Use Open Library API to get title, author(s), and first publish year.
 - Use 4 Python classes:
-  - BookFetcher
-  - BookCleaner
-  - BookDatabase
-  - BookVisualizer
+  - `BookFetcher` – to fetch book data using API.
+  - `BookCleaner` – to clean and format the data.
+  - `BookDatabase` – to store cleaned data into a SQL database. *(To be implemented)*
+  - `BookVisualizer` – to create a count plot of books by first publish year. *(To be implemented)*
 
 ## Progress Log
 
 | Date       | Work Done                                                                                             | Next Steps                                                        |
 |------------|--------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|
 | 2025-06-23 | - Explored Open Library API and checked available endpoints. <br> - Planned class structure. <br> - Created GitHub repo and added initial README. | - Start working on `BookFetcher` class. <br> - Finalize API endpoint and test response. |
-
+| 2025-06-25 | - Implemented `BookFetcher` class to fetch top 100 books sorted by rating.<br> - Implemented `BookCleaner` class to clean and format book data.<br> - Tested both classes successfully with print preview. | - Implement `BookDatabase` to store cleaned data.<br> - Begin planning `BookVisualizer` class. |
