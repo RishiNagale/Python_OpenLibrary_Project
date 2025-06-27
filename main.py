@@ -4,6 +4,8 @@ import json
 import pymysql
 import os
 import re
+import pandas as pd
+import matplotlib.pyplot as plt
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -170,7 +172,7 @@ class BookDatabase:
         print(f"Inserted {len(raw_books)} raw books into 'raw_books' table.")
 
     def insert_cleaned_books(self, cleaned_books):
-        # Insert cleaned books and normalized authorship data
+        # Insert cleaned books and normalized authors data
         with self.connection.cursor() as cursor:
             for book in cleaned_books:
                 # Insert book (ignore duplicates)
@@ -183,7 +185,11 @@ class BookDatabase:
                     "SELECT id FROM cleaned_books WHERE title=%s AND first_publish_year=%s",
                     (book["title"], book["first_publish_year"])
                 )
-                book_id = cursor.fetchone()[0]
+                result = cursor.fetchone()
+                if result is None:
+                    logging.error(f"Book not found in cleaned_books: {book['title']} ({book['first_publish_year']})")
+                    continue
+                book_id = result[0]
 
                 # Insert authors and link to book
                 for author_name in book["authors"]:
@@ -207,6 +213,44 @@ class BookDatabase:
         self.connection.close()
         print("Database connection closed.")
 
+# --- BookVisualizer ---
+class BookVisualizer:
+    def __init__(self, host, user, password, db_name):
+        # Connect to the same MySQL database
+        self.connection = pymysql.connect(
+            host=host,
+            user=user,
+            password=password,
+            database=db_name
+        )
+
+    def plot_books_by_year(self):
+        # Query to get the count of books by first publish year
+        query = """
+            SELECT first_publish_year, COUNT(*) as book_count
+            FROM cleaned_books
+            GROUP BY first_publish_year
+            ORDER BY first_publish_year
+        """
+        df = pd.read_sql(query, self.connection)
+
+        if df.empty:
+            print("No data available to plot.")
+            return
+
+        # Only plot years with data (no fill for missing years)
+        plt.figure(figsize=(16, 8))
+        plt.bar(df['first_publish_year'].astype(str), df['book_count'], color='skyblue', width=0.8)
+        plt.xlabel("First Publish Year")
+        plt.ylabel("Number of Books")
+        plt.title("Number of Books by First Publish Year")
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.show()
+
+    def close(self):
+        self.connection.close()
+
 if __name__ == "__main__":
     # Create the DB handler and let it handle DB and table creation
     db = BookDatabase(
@@ -225,5 +269,15 @@ if __name__ == "__main__":
     cleaner = BookCleaner(raw_books)
     cleaned_books = cleaner.clean()
     db.insert_cleaned_books(cleaned_books)
+
+    # Visualize the data
+    visualizer = BookVisualizer(
+        host="localhost",
+        user=os.environ['DB_USER'],
+        password=os.environ['DB_PASSWORD'],
+        db_name="books_db"
+    )
+    visualizer.plot_books_by_year()
+    visualizer.close()
 
     db.close() # Close the database connection
