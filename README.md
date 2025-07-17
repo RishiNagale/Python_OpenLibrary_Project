@@ -1,4 +1,4 @@
-# Open Library Book Analysis Project Repo
+# Open Library Book Analysis Project
 
 ## Overview
 
