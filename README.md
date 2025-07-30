@@ -1,6 +1,6 @@
 # Open Library Book Analysis Project
 
-## Overview:
+## Overview
 
 This project demonstrates how to fetch, clean, store, and visualize book data from the [Open Library API](https://openlibrary.org). The workflow is fully automated using Python and MySQL, and the code is organized into clear, reusable classes.
 
