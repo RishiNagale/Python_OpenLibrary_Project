@@ -4,7 +4,7 @@
 
 This project demonstrates how to fetch, clean, store, and visualize book data from the [Open Library API](https://openlibrary.org). The workflow is fully automated using Python and MySQL, and the code is organized into clear, reusable classes.
 
-## What the Code Does
+## What the Code Does :)
 
 1. **Fetches Data:**  
    Uses the Open Library API to retrieve the top 100 books, including their titles, authors, and first publish years.
